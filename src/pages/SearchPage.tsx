@@ -24,7 +24,7 @@ export const SearchPage = () => {
   };
 
   const handleInputClick = () => {
-    //
+    setVisible(!visible);
   };
 
   return (
@@ -44,7 +44,7 @@ export const SearchPage = () => {
           </button>
         </div>
       </form>
-      <SearchBox/>
+      {visible && <SearchBox visible={visible} setVisible={setVisible} />}
     </div>
   );
 }
