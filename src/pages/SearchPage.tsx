@@ -2,25 +2,71 @@ import React, { useState, useEffect, useRef } from 'react'
 import { ReactComponent as SearchIc } from "../assets/search.svg";
 import SearchBox from "../components/SearchBox";
 import { useDebounce } from "../hooks/useDebounce";
+import { getSicks } from "../apis/sick";
 
-interface SearchResult {
-  sickCd?: string;
-  sickNm?: string;
+export interface SearchResult {
+  sickCd: string;
+  sickNm: string;
 }
 
 export const SearchPage = () => {
   const [query, setQuery] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
 
   const cacheKey = `sick_${query}`;
 
+  // 비동기 함수로 검색 결과를 가져오고 캐시에 저장
+  const fetchSearchResults = async (value: string) => {
+    const cache = await caches.open(cacheKey);
+    const cachedResponse = await cache.match(value);
+
+    if (cachedResponse) {
+      const dataWithExpiration = await cachedResponse.json();
+      const { value: data, expiration } = dataWithExpiration;
+
+      if (Date.now() < expiration) {
+        // 만료되지 않았으면 캐시된 데이터 사용
+        setSearchResults(data);
+        return;
+      } else {
+        // 만료되었다면 캐시에서 제거
+        await cache.delete(value);
+      }
+    }
+
+    // 서버에서 새로운 데이터를 가져와 캐시에 저장
+    const cacheExpireTime = 5 * 60 * 1000; // 5 minute
+
+    try {
+      const data = await getSicks(value);
+      setSearchResults(data);
+
+      const expiration = Date.now() + cacheExpireTime;
+      const dataWithExpiration = {
+        value: data,
+        expiration,
+      };
+      const response = new Response(JSON.stringify(dataWithExpiration), {
+        headers: { 'Cache-Control': `max-age=${cacheExpireTime / 1000}` },
+      });
+      cache.put(value, response); // 캐시에 결과 저장
+    } catch (error) {
+      console.log('Error while fetching search results: ', error);
+      // 검색 결과 초기화
+      setSearchResults([]);
+    }
+  };
+
+
   const handleInputChange = useDebounce((e: React.FormEvent<HTMLInputElement>) => {
-    // setQuery(e.currentTarget.value);
     const value = e.target.value.trim();
     if (value === '') {
+      setSearchResults([]);
       setVisible(false);
     } else {
-      fetchData(query)
+      fetchSearchResults(value);
+      setVisible(true);
     }
   }, 1000);
 
@@ -30,14 +76,6 @@ export const SearchPage = () => {
 
   const handleSearchClick = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    try {
-      fetchData()
-      .then(() => console.log("A"))
-      .catch(err => console.log(err));
-      
-    } catch {
-      throw new Error("ERROR");
-    }
     console.log(query);
     setQuery('');
   };
@@ -62,7 +100,12 @@ export const SearchPage = () => {
           </button>
         </div>
       </form>
-      {visible && <SearchBox visible={visible} setVisible={setVisible} />}
+      {visible && (
+        <SearchBox
+          visible={visible}
+          setVisible={setVisible}
+        />
+      )}
     </div>
   );
 }

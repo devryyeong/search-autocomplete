@@ -8,7 +8,7 @@ interface SearchBoxProps {
 
 const SearchBox = ({ visible, setVisible }: SearchBoxProps) => {
   const searchBoxRef = useRef<HTMLDivElement>(null);
-
+  
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (
