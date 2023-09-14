@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export default function useCachedData<T>(
   cacheKey: string,
   fetchData: () => Promise<T>
