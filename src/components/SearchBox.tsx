@@ -1,12 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-interface SearchBoxProps {
-  visible: boolean;
-  setVisible: (visible: boolean) => void;
-  closeBox?: void;
-}
-
-const SearchBox = ({ visible, setVisible }: SearchBoxProps) => {
+const SearchBox = () => {
   const searchBoxRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
@@ -15,7 +9,7 @@ const SearchBox = ({ visible, setVisible }: SearchBoxProps) => {
         searchBoxRef.current &&
         !searchBoxRef.current.contains(e.target as Node)
       ) {
-        setVisible(!visible);
+        //
       }
     };
 
