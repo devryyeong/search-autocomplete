@@ -1,7 +1,8 @@
-import { ReactComponent as SearchIc } from "../assets/search.svg";
 import useSearch from "../hooks/useSearch";
 import useOnclickOutside from "../hooks/useOnclickOutside";
 import SearchBox from "./SearchBox";
+import { ReactComponent as SearchIc } from "../assets/search.svg";
+import { ReactComponent as DeleteIc } from "../assets/delete.svg";
 
 const SearchInput = () => {
   const {
@@ -33,6 +34,11 @@ const SearchInput = () => {
           onFocus={handleOpen}
           onKeyDown={handleSearchKeyDown}
         />
+        {isShow && (
+          <button onClick={handleSearchReset}>
+            <DeleteIc className="w-6 h-6" />
+          </button>
+        )}
         <button className="bg-[#017BE8] rounded-full mx-4 w-12 h-12 flex justify-center items-center">
           <SearchIc />
         </button>
