@@ -1,4 +1,3 @@
-import SearchBox from "../components/SearchBox";
 import SearchInput from "../components/SearchInput";
 
 export const SearchPage = () => {
@@ -9,7 +8,6 @@ export const SearchPage = () => {
       </div>
       <br />
       <SearchInput />
-      <SearchBox />
     </div>
   );
 }

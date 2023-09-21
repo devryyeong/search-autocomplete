@@ -1,4 +1,4 @@
-export type SickProps = {
+type SickProps = {
   sickCd: string;
   sickNm: string;
 };

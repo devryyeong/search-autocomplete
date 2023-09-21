@@ -14,7 +14,7 @@ const cache = (() => {
 
       await cacheStorage.put(url, response);
     },
-    async get(url: string, data: unknown) {
+    async get(url: string) {
       const cacheStorage = await getCacheStorage();
       const response = await cacheStorage.match(url);
 
