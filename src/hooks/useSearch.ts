@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import useDebounce from "./useDebounce";
 import { getSicks } from "../apis/sick";
-import { SickProps } from "../types/sick";
+import { SickListProps } from "../types/sick";
 
-const limitResult = (list: SickProps[], num: number) => list.slice(0, num);
+const limitResult = (list: SickListProps[], num: number) => list.slice(0, num);
 
 const useSearch = () => {
   const [search, setSearch] = useState("");
-  const [searchList, setSearchList] = useState<SickProps[]>([]);
+  const [searchList, setSearchList] = useState<SickListProps[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
   const [currentIdx, setCurrentIdx] = useState<number>(-1);
   const debounceSearch = useDebounce(search);
@@ -19,8 +19,6 @@ const useSearch = () => {
   const handleClose = () => setIsShow(false);
 
   const handleSearchKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
-    // console.log('e: e');
-    // console.log('e.key: ', e.key);
     const searchKeyUpDown: { [index: string]: () => void } = {
       ArrowUp() {
         e.preventDefault();
