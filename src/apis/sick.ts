@@ -1,5 +1,5 @@
 import axios from "axios";
-import cache from "../components/utils/cache";
+import cache from "../utils/cache";
 import { SickListProps } from "../types/sick";
 
 const instance = axios.create({
