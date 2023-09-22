@@ -75,7 +75,7 @@ npm start
 </details>
 
 <details>
-  <summary><b>2) API `호출별로` 로컬 캐싱 구현</b></summary>
+  <summary><b>2) API 호출별 로컬 캐싱 구현</b></summary>
 
   - cacheStorage를 활용하여 서버 데이터를 캐시로 저장하고, 필요할 때 지정된 데이터를 반환하여 서버 부하를 줄이는 방식을 택했다.
   - cacheStorage는 Response 객체를 저장하는데, AxiosResponse 객체는 저장할 수 없으므로 data만 추출하여 생성자 Response로 Response 객체를 만들어 저장했다.
